@@ -1,0 +1,2351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classroom Syntax Suite: 10 Interactive Lessons</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="A premium, interactive classroom slide deck containing 10 syntax lessons. Optimized for 1080p displays with hover-to-zoom magnification, full-screen Super Reveal overlay, pacing timer, and minimalist controls.">
+  <meta name="author" content="Antigravity Syntax Builder">
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      /* Theme Palette: High-Visibility Professional Light Mode */
+      --bg-primary: #F8F9FA;
+      --bg-secondary: #F8F9FA;
+      --bg-card: #FFFFFF;
+      --border-color: rgba(0, 0, 0, 0.12);
+      --border-hover: rgba(0, 86, 210, 0.45);
+      
+      --text-primary: #1A1A1A;
+      --text-secondary: #333333;
+      --text-muted: #5A626A;
+      
+      --color-accent: #0056D2;
+      --color-accent-hover: #00409E;
+      --color-accent-glow: rgba(0, 86, 210, 0.1);
+      
+      --color-accent-2: #D63384;
+      --color-accent-2-glow: rgba(214, 51, 132, 0.15);
+      
+      --color-green: #198754;
+      --color-green-glow: rgba(25, 135, 84, 0.1);
+      --color-orange: #D97706;
+      --color-orange-glow: rgba(217, 119, 6, 0.1);
+      --color-red: #DC3545;
+      --color-red-glow: rgba(220, 53, 69, 0.1);
+      
+      --font-title: 'Inter', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      
+      --transition-speed: 0.5s;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      line-height: 1.5;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-image: none;
+    }
+
+    /* Top Progress Bar */
+    .progress-bar-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      background: rgba(0, 0, 0, 0.05);
+      z-index: 1000;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #0056D2, #6F42C1, #D63384);
+      transition: width var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 12px rgba(0, 86, 210, 0.4);
+    }
+
+    /* Deck Viewport wrapper */
+    .deck-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* Common Slide Styling */
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5vh 1.5vw;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-speed) ease, transform var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+      z-index: 10;
+    }
+
+    .slide.past {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-80px);
+    }
+
+    .slide.future {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(80px);
+    }
+
+    /* Minimalist Dashboard Button (Extreme Top-Left) */
+    .home-btn {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 1200;
+      background: rgba(0, 86, 210, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--color-accent);
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      opacity: 0.8;
+    }
+
+    .home-btn:hover {
+      opacity: 1;
+      background: rgba(0, 86, 210, 0.15);
+      border-color: var(--color-accent);
+      color: var(--color-accent-hover);
+      transform: scale(1.05);
+    }
+
+    /* Keyboard Instruction Indicator */
+    .keyboard-hint {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 6px;
+      z-index: 1000;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      opacity: 0.5;
+    }
+
+    /* Slide Selector Dashboard (Slide 0) */
+    #slide-dashboard {
+      overflow-y: auto;
+      justify-content: flex-start;
+      padding: 4rem 2rem;
+    }
+
+    .dashboard-container {
+      width: 100%;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      box-sizing: border-box;
+    }
+
+    .dashboard-header {
+      text-align: center;
+      margin-top: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2.2rem;
+      width: 100%;
+      max-width: 1300px;
+      padding: 1rem;
+      box-sizing: border-box;
+    }
+
+    .lesson-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      border-radius: 20px;
+      padding: 2.2rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .lesson-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 86, 210, 0.12);
+      background: rgba(0, 86, 210, 0.02);
+    }
+
+    .lesson-card-num {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--color-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .lesson-card-title {
+      font-family: var(--font-title);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .lesson-card-desc {
+      font-size: 1.3rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    /* Core Typography & Primary Text (Aggressive Scaling for 1080p) */
+    h1 {
+      font-family: var(--font-title);
+      font-size: clamp(3.8rem, 5.2vw, 6.8rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--color-accent) 40%, var(--text-primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      flex-shrink: 0;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--color-accent);
+      margin-top: 0;
+      margin-bottom: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      flex-shrink: 0;
+    }
+
+    /* Text Dominance: Primary text scales aggressively to occupy screen space */
+    .slide-primary-text {
+      font-family: var(--font-title);
+      font-size: clamp(3.5rem, 5.5vw, 7.5rem);
+      font-weight: 600;
+      line-height: 1.5;
+      letter-spacing: -0.015em;
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+      text-align: center;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .slide-primary-text strong {
+      font-weight: 800;
+    }
+
+    /* Highlight classes */
+    .highlight {
+      color: var(--color-accent);
+      font-weight: 800;
+      border-bottom: 4px solid var(--color-accent);
+      padding-bottom: 2px;
+    }
+
+    .highlight-alt {
+      color: #0AA2C0;
+      font-weight: 800;
+      border-bottom: 4px solid #0AA2C0;
+      padding-bottom: 2px;
+    }
+
+    .highlight-success {
+      color: var(--color-green);
+      font-weight: 800;
+    }
+
+    /* Full-screen Spatial Container Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 1.8rem 2.8rem;
+      width: 98vw;
+      max-width: 1880px;
+      height: 86vh;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.05);
+      backdrop-filter: blur(20px);
+      transition: border-color 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      overflow: visible;
+      box-sizing: border-box;
+    }
+
+    .card:hover {
+      border-color: var(--border-hover);
+    }
+
+    /* Card inner centering wrapper to maximize space usage */
+    .card-body {
+      flex: 1;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+    
+    .card-body::-webkit-scrollbar {
+      width: 6px;
+    }
+    .card-body::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.02);
+      border-radius: 3px;
+    }
+    .card-body::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.12);
+      border-radius: 3px;
+    }
+    .card-body::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 0, 0, 0.24);
+    }
+
+    /* Context Comparison Slide */
+    .comparison-col {
+      background: rgba(0, 0, 0, 0.01);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      box-sizing: border-box;
+    }
+
+    .comparison-col.bad {
+      border-left: 6px solid var(--color-red);
+      background: rgba(220, 53, 69, 0.02);
+    }
+
+    .comparison-col.good {
+      border-left: 6px solid var(--color-green);
+      background: rgba(25, 135, 84, 0.02);
+    }
+
+    .comparison-header {
+      font-family: var(--font-title);
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .comparison-header.bad-text { color: var(--color-red); }
+    .comparison-header.good-text { color: var(--color-green); }
+
+    /* Vocabulary Slide */
+    .vocab-term {
+      font-family: var(--font-title);
+      font-size: clamp(3.5rem, 5.2vw, 6.5rem);
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px var(--color-accent-glow);
+    }
+
+    .toggle-group {
+      display: inline-flex;
+      background: rgba(0, 0, 0, 0.04);
+      border: 1px solid var(--border-color);
+      padding: 4px;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+    }
+
+    .toggle-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-family: var(--font-body);
+      font-size: 1.4rem;
+      font-weight: 600;
+      padding: 0.6rem 2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .toggle-btn.active {
+      background: var(--color-accent);
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(0, 86, 210, 0.25);
+    }
+
+    .toggle-btn:hover:not(.active) {
+      color: var(--text-primary);
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    .vocab-definition-box {
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    .vocab-definition {
+      line-height: 1.5;
+      color: var(--text-primary);
+      transition: opacity 0.3s ease;
+      text-align: center;
+    }
+
+    .vocab-example {
+      margin-top: 1.5rem;
+      color: var(--text-secondary);
+      font-style: italic;
+      border-left: 4px solid var(--color-accent);
+      padding-left: 1.5rem;
+      text-align: left;
+      max-width: 1000px;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Teacher Mode worked examples */
+    .examples-container {
+      width: 100%;
+    }
+
+    .reveal-btn {
+      background: var(--color-accent);
+      color: #FFFFFF;
+      border: none;
+      font-family: var(--font-body);
+      font-size: 1.6rem;
+      font-weight: 800;
+      padding: 1rem 2.2rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 15px rgba(0, 86, 210, 0.25);
+    }
+
+    .reveal-btn:hover {
+      background: var(--color-accent-hover);
+      transform: translateY(-2px);
+    }
+
+    /* You Do Slide Layout */
+    .youdo-layout {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      width: 98vw;
+      max-width: 1880px;
+      height: 86vh;
+      gap: 1rem;
+      box-sizing: border-box;
+    }
+
+    .youdo-main-card {
+      flex: 1;
+      width: 100%;
+      height: auto !important;
+    }
+
+    /* Low-Profile You Do Footer badges (Highly Minimalist) */
+    .youdo-footer {
+      width: 100%;
+      border-top: 1px solid var(--border-color);
+      padding: 0.6rem 180px 0 180px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      align-items: center;
+      min-height: 70px;
+      box-sizing: border-box;
+      margin-top: auto;
+      flex-shrink: 0;
+    }
+
+    .youdo-footer-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .prev-questions-row {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .prev-q-badge {
+      background: rgba(0, 0, 0, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0.4rem 1rem;
+      max-width: 200px;
+      text-align: left;
+      opacity: 0.6;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+
+    .prev-q-badge:hover {
+      opacity: 1;
+      border-color: var(--border-hover);
+      background: rgba(0, 86, 210, 0.05);
+      transform: translateY(-2px);
+    }
+
+    .prev-badge-num {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--color-accent);
+      display: block;
+      margin-bottom: 0.1rem;
+    }
+
+    .prev-badge-text {
+      font-size: 0.95rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+      color: var(--text-secondary);
+    }
+
+    /* Review Slide Layout */
+    .review-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.2rem;
+      width: 100%;
+      max-height: 65vh;
+      overflow-y: auto;
+      padding-right: 12px;
+      text-align: left;
+      box-sizing: border-box;
+    }
+
+    .review-grid::-webkit-scrollbar {
+      width: 6px;
+    }
+    .review-grid::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.02);
+      border-radius: 3px;
+    }
+    .review-grid::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.12);
+      border-radius: 3px;
+    }
+    .review-grid::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 0, 0, 0.24);
+    }
+
+    .review-item {
+      background: rgba(0, 0, 0, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.2rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .review-q-num {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--color-accent);
+      text-transform: uppercase;
+    }
+
+    .review-q-text {
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .review-q-answer {
+      font-size: 1.7rem;
+      font-weight: 600;
+      color: var(--color-accent-2);
+    }
+
+    /* High-Contrast Super Reveal Full-Screen Overlay (Light Mode) */
+    .super-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #FFFFFF;
+      z-index: 2500;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      box-sizing: border-box;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .super-overlay.active {
+      opacity: 1;
+    }
+
+    .super-overlay-text {
+      font-family: var(--font-title);
+      font-size: clamp(4.5rem, 7vw, 9.5rem);
+      font-weight: 800;
+      line-height: 1.2;
+      color: var(--color-accent-2);
+      text-shadow: 0 4px 25px rgba(214, 51, 132, 0.2);
+      text-align: center;
+      max-width: 96%;
+    }
+
+    .super-overlay-hint {
+      margin-top: 3rem;
+      font-size: 1.4rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-weight: 600;
+    }
+
+    /* Pinned Visual Pacing Timer (Bottom-Left: Compact) */
+    #timer-display {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      font-family: var(--font-title);
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 5px 10px;
+      background: rgba(8, 8, 10, 0.6);
+      border: 1px solid var(--color-green);
+      border-radius: 6px;
+      backdrop-filter: blur(8px);
+      z-index: 1200;
+      transition: all 0.3s ease;
+      color: var(--color-green);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      opacity: 0.75;
+    }
+
+    #timer-display::before {
+      content: "\23F1";
+      font-size: 1.1rem;
+    }
+
+    #timer-display.green {
+      color: var(--color-green);
+      border-color: var(--color-green);
+    }
+
+    #timer-display.orange {
+      color: var(--color-orange);
+      border-color: var(--color-orange);
+    }
+
+    #timer-display.red {
+      color: var(--color-red);
+      border-color: var(--color-red);
+    }
+
+    /* Pinned Navigation Controls (Bottom-Right: Compact) */
+    .navigation-controls {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      z-index: 1200;
+      background: rgba(8, 8, 10, 0.6);
+      border: 1px solid var(--border-color);
+      padding: 4px 8px;
+      border-radius: 8px;
+      backdrop-filter: blur(8px);
+      opacity: 0.75;
+      transition: opacity 0.3s ease;
+    }
+
+    .navigation-controls:hover {
+      opacity: 1;
+      background: rgba(8, 8, 10, 0.9);
+    }
+
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--color-accent);
+      border-color: var(--color-accent);
+      color: var(--text-primary);
+      transform: translateY(-1px);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    .slide-indicator {
+      font-family: var(--font-title);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      min-width: 120px;
+      text-align: center;
+    }
+
+    /* Screen Adjustments for smaller resolutions */
+    @media (max-height: 750px) {
+      .slide-primary-text { font-size: clamp(2.5rem, 4.5vw, 5rem); }
+      .super-overlay-text { font-size: clamp(3.5rem, 5.5vw, 7.5rem); }
+      .card { height: 84vh; padding: 1.2rem 2rem; }
+      .youdo-layout { height: 84vh; }
+      .youdo-footer { min-height: 60px; padding-top: 0.4rem; }
+    }
+
+    
+  </style>
+</head>
+<body>
+
+  <!-- Top Progress Bar -->
+  <div class="progress-bar-container">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+
+  <!-- Keyboard Hint -->
+  <div class="keyboard-hint" id="keyboard-hint">Scroll or use Arrows to navigate</div>
+
+  <!-- Pinned Dashboard Button (Top-Left Circular Icon) -->
+  <button class="home-btn" id="home-btn" style="display: none;" title="Go to Dashboard">
+    &#127968;
+  </button>
+
+  <!-- Pinned Timer (Bottom-Left) -->
+  <div id="timer-display" class="green">00:00</div>
+
+  <!-- Pinned Slide Controls (Bottom-Right) -->
+  <div class="navigation-controls" id="nav-controls" style="display: none;">
+    <button class="nav-btn" id="prev-btn" aria-label="Previous Slide">&larr;</button>
+    <div class="slide-indicator" id="slide-indicator">Loading...</div>
+    <button class="nav-btn" id="next-btn" aria-label="Next Slide">&rarr;</button>
+  </div>
+
+  <!-- Super Reveal Full Screen Overlay -->
+  <div id="super-reveal-overlay" class="super-overlay">
+    <div class="super-overlay-text" id="super-reveal-text">--</div>
+    <div class="super-overlay-hint">Click or Scroll anywhere to dismiss</div>
+  </div>
+
+  <!-- Slide Deck Viewport -->
+  <div class="deck-container">
+
+    <!-- Slide 0: Lesson Selector Dashboard -->
+    <section class="slide active" id="slide-dashboard">
+      <div class="dashboard-container">
+        
+        <div class="dashboard-header">
+          <h2>Classroom Presentation Suite</h2>
+          <h1 style="margin-bottom: 0.5rem;">Syntax Lesson Deck</h1>
+          <p style="font-size: 1.8rem; color: var(--text-secondary);">Select a 15-minute guided lesson below to begin projecting</p>
+        </div>
+        <div class="dashboard-grid" id="dashboard-grid">
+          <!-- Populated from JS -->
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    const LESSONS = [
+    {
+        "id":  1,
+        "title":  "Commas",
+        "subtitle":  "Punctuation \u0026 Organization",
+        "desc":  "Learn how commas separate, clarify, and organize parts of a sentence across dates, lists, and clauses.",
+        "objectives":  [
+                           "A comma is used to separate words or clauses in a sentence.",
+                           "Commas are placed between dates, list items, and clauses.",
+                           "We use commas to organize writing and clarify meaning."
+                       ],
+        "context":  {
+                        "badTitle":  "Choppy Flow (Without Commas)",
+                        "badText":  "On March 14 2024 our class went on a trip.",
+                        "goodTitle":  "Elegant Flow (With Commas)",
+                        "goodText":  "On \u003cspan class=\u0027highlight\u0027\u003eMarch 14, 2024\u003c/span\u003e, our class went on a trip."
+                    },
+        "vocab":  {
+                      "term":  "Comma (,)",
+                      "languages":  {
+                                        "english":  {
+                                                        "definition":  "A comma (,) is a punctuation mark used to separate words or clauses in a sentence, helping to clarify meaning and introduce natural pauses.",
+                                                        "example":  "Example: After the storm, the streets were flooded."
+                                                    },
+                                        "chinese":  {
+                                                        "definition":  "\u003cstrong\u003e逗号 (,)\u003c/strong\u003e：用于分隔句子中的词语或想法，使意思更清晰并表示短暂的停顿。",
+                                                        "example":  "例句：暴风雨过后，街道被淹了。"
+                                                    },
+                                        "korean":  {
+                                                       "definition":  "\u003cstrong\u003e쉼표 (,)\u003c/strong\u003e: 문장에서 단어나 생각을 구분하여 의미를 명확히 하고 짧은 멈춤을 나타냅니다.",
+                                                       "example":  "예문: 폭풍이 지난 후, 길거리는 물에 잠겼다."
+                                                   }
+                                    }
+                  },
+        "ido":  [
+                    {
+                        "sentence":  "Dad, I’m afraid I lost my phone.",
+                        "prompt":  "Identify the comma rule in this direct address sentence.",
+                        "answer":  "A comma is placed after \u0027Dad\u0027 because he is being directly addressed."
+                    },
+                    {
+                        "sentence":  "My mum drinks coffee, but I prefer iced coffee.",
+                        "prompt":  "Identify the comma rule in this compound sentence.",
+                        "answer":  "Use a comma before the coordinating conjunction \u0027but\u0027 joining independent clauses."
+                    }
+                ],
+        "wedo":  [
+                     {
+                         "sentence":  "Wednesday August 25 2005",
+                         "prompt":  "Place commas correctly in this date.",
+                         "answer":  "Correct: Wednesday, August 25, 2005"
+                     },
+                     {
+                         "sentence":  "Even though my grandma is little she sure is energetic.",
+                         "prompt":  "Place the comma in this complex sentence.",
+                         "answer":  "Correct: Even though my grandma is little, she sure is energetic."
+                     }
+                 ],
+        "youdo":  [
+                      {
+                          "id":  1,
+                          "question":  "On July 4 1776 the United States declared independence.",
+                          "instruction":  "Identify and place the missing commas in the date structure.",
+                          "answer":  "On July 4, 1776, the United States declared independence."
+                      },
+                      {
+                          "id":  2,
+                          "question":  "Before the movie starts we need to buy popcorn and drinks.",
+                          "instruction":  "Place a comma after the introductory dependent clause.",
+                          "answer":  "Before the movie starts, we need to buy popcorn and drinks."
+                      },
+                      {
+                          "id":  3,
+                          "question":  "The bright shiny red balloon floated into the sky.",
+                          "instruction":  "Add commas to separate multiple coordinate adjectives.",
+                          "answer":  "The bright, shiny, red balloon floated into the sky."
+                      },
+                      {
+                          "id":  4,
+                          "question":  "Sarah likes reading painting and playing the piano.",
+                          "instruction":  "Add commas to separate three or more items in a list.",
+                          "answer":  "Sarah likes reading, painting, and playing the piano."
+                      },
+                      {
+                          "id":  5,
+                          "question":  "I wanted to go to the park but it started to rain.",
+                          "instruction":  "Punctuate the compound sentence containing two independent clauses.",
+                          "answer":  "I wanted to go to the park, but it started to rain."
+                      }
+                  ]
+    },
+    {
+        "id":  2,
+        "title":  "Relative Clauses",
+        "subtitle":  "Complex Sentence Scaffolding",
+        "desc":  "Learn to identify relative pronouns and adverbs, and use adjectival clauses to embed rich details into sentences.",
+        "objectives":  [
+                           "Relative clauses add detail to nouns using who, which, or that.",
+                           "A relative clause behaves like an adjectival clause describing a noun.",
+                           "We use relative clauses to merge separate sentences cleanly."
+                       ],
+        "context":  {
+                        "badTitle":  "Repetitive Clauses (No Relative Clause)",
+                        "badText":  "The Swan River runs through Perth. The river is famous for its black swans.",
+                        "goodTitle":  "Integrated Clauses (With Relative Clause)",
+                        "goodText":  "The Swan River, \u003cspan class=\u0027highlight\u0027\u003ewhich is famous for its black swans\u003c/span\u003e, runs through Perth."
+                    },
+        "vocab":  {
+                      "term":  "Relative Clause",
+                      "languages":  {
+                                        "english":  {
+                                                        "definition":  "A relative clause is a part of a sentence that describes a noun, starting with relative pronouns like who, which, or that.",
+                                                        "example":  "Example: The girl who is singing is my sister."
+                                                    },
+                                        "chinese":  {
+                                                        "definition":  "\u003cstrong\u003e关系从句\u003c/strong\u003e：句中修饰名词的部分，通常以 who, which 或 that 开头。",
+                                                        "example":  "例句：正在唱歌的女孩是我的妹妹。"
+                                                    },
+                                        "korean":  {
+                                                       "definition":  "\u003cstrong\u003e관계절\u003c/strong\u003e: 명사를 설명해 주는 문장 부분으로, 주로 who, which, 또는 that으로 시작합니다.",
+                                                       "example":  "예문: 노래를 부르고 있는 저 소녀는 내 여동생이다."
+                                                   }
+                                    }
+                  },
+        "ido":  [
+                    {
+                        "sentence":  "Bushfires, which are often caused by a lightning strike, are a major cause of devastation.",
+                        "prompt":  "Identify the relative pronoun and the relative clause.",
+                        "answer":  "Pronoun: \u0027which\u0027. Clause: \u0027which are often caused by a lightning strike\u0027."
+                    },
+                    {
+                        "sentence":  "The energetic child, who broke everything in sight, was asked to leave the store.",
+                        "prompt":  "Identify the relative pronoun and name the noun it describes.",
+                        "answer":  "Pronoun: \u0027who\u0027. It describes the noun phrase \u0027The energetic child\u0027."
+                    }
+                ],
+        "wedo":  [
+                     {
+                         "sentence":  "The meat pie, which was hot out of the oven, fell to the floor.",
+                         "prompt":  "Combine \u0027The meat pie fell. It was hot out of the oven\u0027 using \u0027which\u0027.",
+                         "answer":  "Correct: The meat pie, which was hot out of the oven, fell to the floor."
+                     },
+                     {
+                         "sentence":  "My grandfather, who is an exceptional gardener, has two homes.",
+                         "prompt":  "Combine \u0027My grandfather has two homes. He is an exceptional gardener\u0027 using \u0027who\u0027.",
+                         "answer":  "Correct: My grandfather, who is an exceptional gardener, has two homes."
+                     }
+                 ],
+        "youdo":  [
+                      {
+                          "id":  1,
+                          "question":  "Identify the relative clause: \u0027The teacher who helped me is kind.\u0027",
+                          "instruction":  "Find the dependent clause starting with the relative pronoun.",
+                          "answer":  "who helped me"
+                      },
+                      {
+                          "id":  2,
+                          "question":  "Identify the relative clause: \u0027I saw a movie that made me cry.\u0027",
+                          "instruction":  "Find the dependent clause starting with the relative pronoun.",
+                          "answer":  "that made me cry"
+                      },
+                      {
+                          "id":  3,
+                          "question":  "Identify the relative clause: \u0027The boy who is running is late.\u0027",
+                          "instruction":  "Find the dependent clause starting with the relative pronoun.",
+                          "answer":  "who is running"
+                      },
+                      {
+                          "id":  4,
+                          "question":  "Combine using \u0027that\u0027: \u0027I have a book. It is very interesting.\u0027",
+                          "instruction":  "Replace \u0027It\u0027 with the relative pronoun \u0027that\u0027 to merge the thoughts.",
+                          "answer":  "I have a book that is very interesting."
+                      },
+                      {
+                          "id":  5,
+                          "question":  "Combine using \u0027who\u0027: \u0027The girl is my friend. She plays netball.\u0027",
+                          "instruction":  "Embed a relative clause describing the girl into the sentence.",
+                          "answer":  "The girl who plays netball is my friend."
+                      }
+                  ]
+    },
+    {
+        "id":  3,
+        "title":  "Ellipses",
+        "subtitle":  "Incomplete Thoughts \u0026 Pauses",
+        "desc":  "Use the three dots (...) punctuation mark correctly to express hesitation, trailing thoughts, suspense, or emphasis.",
+        "objectives":  [
+                           "Ellipses show incomplete thoughts, pauses, or hesitation.",
+                           "An ellipsis is represented by three consecutive dots (...).",
+                           "We use ellipses to create dialogue suspense or narrative pauses."
+                       ],
+        "context":  {
+                        "badTitle":  "Dialogue Without Hesitation (No Ellipsis)",
+                        "badText":  "I really want to go, but I have to stay home.",
+                        "goodTitle":  "Hesitant Dialogue (With Ellipsis)",
+                        "goodText":  "“I really want to go, but… \u003cspan class=\u0027highlight\u0027\u003eI have to stay home\u003c/span\u003e.”"
+                    },
+        "vocab":  {
+                      "term":  "Ellipsis (...)",
+                      "languages":  {
+                                        "english":  {
+                                                        "definition":  "An ellipsis is a punctuation mark of three dots (...) showing a pause, a trailing thought, or a hesitation.",
+                                                        "example":  "Example: “I really want to go, but… I have to stay home.”"
+                                                    },
+                                        "chinese":  {
+                                                        "definition":  "\u003cstrong\u003e省略号 (...)\u003c/strong\u003e：三个连续的点，表示停顿、未完的想法或犹豫。",
+                                                        "example":  "例句：“我很想去，但是……我必须留在家里。”"
+                                                    },
+                                        "korean":  {
+                                                       "definition":  "\u003cstrong\u003e말줄임표 (...)\u003c/strong\u003e: 말속의 멈춤, 흐려지는 생각, 또는 주저함을 나타내는 세 개의 점입니다.",
+                                                       "example":  "예문: “정말 가고 싶지만… 집에 있어야 해요.”"
+                                                   }
+                                    }
+                  },
+        "ido":  [
+                    {
+                        "sentence":  "“I was thinking that maybe we could… Never mind, it’s not important.”",
+                        "prompt":  "Identify the purpose of this ellipsis.",
+                        "answer":  "Purpose: Unfinished thought or trailing off."
+                    },
+                    {
+                        "sentence":  "“I’m not sure if I should… Well, I guess I could give it a try.”",
+                        "prompt":  "Identify the purpose of this ellipsis.",
+                        "answer":  "Purpose: Hesitation or uncertainty."
+                    }
+                ],
+        "wedo":  [
+                     {
+                         "sentence":  "“I don’t want to be rude, but… I really don’t think that’s a good idea.”",
+                         "prompt":  "Identify the purpose of this ellipsis.",
+                         "answer":  "Purpose: A pause for emphasis."
+                     },
+                     {
+                         "sentence":  "He walked down the dark alley, heart pounding, when suddenly, he heard a noise behind him…",
+                         "prompt":  "Identify the purpose of this ellipsis.",
+                         "answer":  "Purpose: A break in dialogue/narration to create suspense."
+                     }
+                 ],
+        "youdo":  [
+                      {
+                          "id":  1,
+                          "question":  "Where should the ellipsis go to show hesitation: \u0027I really want to go, but I have to stay home for dinner.\u0027",
+                          "instruction":  "Rewrite the sentence placing the ellipsis for hesitation.",
+                          "answer":  "I really want to go, but… I have to stay home for dinner."
+                      },
+                      {
+                          "id":  2,
+                          "question":  "Where should the ellipsis go for suspense: \u0027She opened her bedroom door and was surprised to see presents!\u0027",
+                          "instruction":  "Rewrite the sentence placing the ellipsis for suspense.",
+                          "answer":  "She opened her bedroom door… and was surprised to see presents!"
+                      },
+                      {
+                          "id":  3,
+                          "question":  "Where should the ellipsis go for a dramatic pause: \u0027The last thing I remembered was the sound of tires screeching, then everything went black.\u0027",
+                          "instruction":  "Rewrite the sentence placing the ellipsis for a dramatic pause.",
+                          "answer":  "The last thing I remembered was the sound of tires screeching… then everything went black."
+                      },
+                      {
+                          "id":  4,
+                          "question":  "Identify the purpose: \u0027“I wonder if…” she thought aloud as she stared at the ground.\u0027",
+                          "instruction":  "State the function of the ellipsis in this character thought.",
+                          "answer":  "An unfinished thought or trailing off."
+                      },
+                      {
+                          "id":  5,
+                          "question":  "Is this ellipsis correct: \u0027He... ate his sandwich noisily.\u0027",
+                          "instruction":  "Explain why it is or is not an appropriate ellipsis.",
+                          "answer":  "No. An ellipsis is not used to separate a subject (\u0027He\u0027) and its verb (\u0027ate\u0027) during standard action sequences."
+                      }
+                  ]
+    },
+    {
+        "id":  4,
+        "title":  "Upgraded Nouns \u0026 Verbs",
+        "subtitle":  "Argumentative Vocabulary",
+        "desc":  "Strengthen your argumentative writing by replacing weak, general words with high-impact nouns and active verbs.",
+        "objectives":  [
+                           "Upgraded nouns and verbs add persuasive weight to arguments.",
+                           "Choosing specific terms (proponents, critics) establishes author authority.",
+                           "Replacing generic words with active synonyms strengthens written assertions."
+                       ],
+        "context":  {
+                        "badTitle":  "Weak Vocabulary",
+                        "badText":  "The people who support the plan say that the new park is good because it makes the city look nice.",
+                        "goodTitle":  "Upgraded Vocabulary",
+                        "goodText":  "The \u003cspan class=\u0027highlight\u0027\u003eproponents\u003c/span\u003e of the plan \u003cspan class=\u0027highlight\u0027\u003eargue\u003c/span\u003e that the new park is beneficial because it \u003cspan class=\u0027highlight-alt\u0027\u003ebeautifies\u003c/span\u003e the city."
+                    },
+        "vocab":  {
+                      "term":  "Upgraded Vocab",
+                      "languages":  {
+                                        "english":  {
+                                                        "definition":  "Upgraded vocabulary means choosing strong, specific nouns and verbs to make your writing more powerful and formal.",
+                                                        "example":  "Example: Proponents (supporters) argue that school uniforms promote equality."
+                                                    },
+                                        "chinese":  {
+                                                        "definition":  "\u003cstrong\u003e升级词汇\u003c/strong\u003e：选用强有力、具体的名词 and 动词，使文章更有说服力和正式。",
+                                                        "example":  "例句：支持者（proponents）认为校服能促进平等。"
+                                                    },
+                                        "korean":  {
+                                                       "definition":  "\u003cstrong\u003e강화된 어휘\u003c/strong\u003e: 글을 더 설득력 있고 격식 있게 만들기 위해 선택하는 강력하고 구체적인 명사와 동사입니다.",
+                                                       "example":  "예문: 지지자들(proponents)은 교복이 평등을 촉진한다고 주장한다."
+                                                   }
+                                    }
+                  },
+        "ido":  [
+                    {
+                        "sentence":  "Several parents and teachers are strong supporters of the uniform policy.",
+                        "prompt":  "Identify the upgraded noun and explain its benefit.",
+                        "answer":  "Noun: \u0027supporters\u0027. It replaces \u0027people\u0027 and specifies their position."
+                    },
+                    {
+                        "sentence":  "Several parents and teachers defend the uniform policy.",
+                        "prompt":  "Identify the upgraded verb and explain its benefit.",
+                        "answer":  "Verb: \u0027defend\u0027. It replaces \u0027like\u0027 with an active, authoritative action verb."
+                    }
+                ],
+        "wedo":  [
+                     {
+                         "sentence":  "While some parents support uniforms, naysayers argue it restricts expression.",
+                         "prompt":  "Identify the upgraded noun used for people who disagree.",
+                         "answer":  "Noun: \u0027naysayers\u0027. It replaces \u0027people who disagree\u0027 with a specific argumentative term."
+                     },
+                     {
+                         "sentence":  "Some parents criticize the idea of making school sports compulsory.",
+                         "prompt":  "Identify the upgraded verb in this sentence.",
+                         "answer":  "Verb: \u0027criticize\u0027. It replaces a weak phrase like \u0027do not like\u0027 with a precise action."
+                     }
+                 ],
+        "youdo":  [
+                      {
+                          "id":  1,
+                          "question":  "Identify the upgraded noun: \u0027The proponents of the new program believe it will benefit the community.\u0027",
+                          "instruction":  "Identify the noun representing advocates of a proposal.",
+                          "answer":  "proponents"
+                      },
+                      {
+                          "id":  2,
+                          "question":  "Identify the upgraded verb: \u0027Many students oppose the idea of excessive homework.\u0027",
+                          "instruction":  "Identify the strong verb indicating active disagreement.",
+                          "answer":  "oppose"
+                      },
+                      {
+                          "id":  3,
+                          "question":  "Upgrade the noun \u0027people who don\u0027t support\u0027 in: \u0027People who don\u0027t support the plan said it would fail.\u0027",
+                          "instruction":  "Provide a single upgraded noun for this phrase.",
+                          "answer":  "Opponents (or critics / naysayers)"
+                      },
+                      {
+                          "id":  4,
+                          "question":  "Upgrade the verb \u0027say\u0027 in: \u0027Scientists say that global warming is accelerating.\u0027",
+                          "instruction":  "Replace the general verb \u0027say\u0027 with a more academic/argumentative verb.",
+                          "answer":  "argue (or assert / demonstrate / warn)"
+                      },
+                      {
+                          "id":  5,
+                          "question":  "Underline the upgraded noun: \u0027Critics of the leadership scrutinized the latest decision.\u0027",
+                          "instruction":  "Identify the upgraded noun in this sentence.",
+                          "answer":  "Critics"
+                      }
+                  ]
+    },
+    {
+        "id":  5,
+        "title":  "Active \u0026 Passive Voice",
+        "subtitle":  "Subject-Action Alignment",
+        "desc":  "Learn to distinguish between active and passive sentences and apply active voice to make your writing clear, strong, and direct.",
+        "objectives":  [
+                           "Active voice makes your writing clear and direct.",
+                           "In active sentences, the subject performs the action.",
+                           "In passive sentences, the subject receives the action."
+                       ],
+        "context":  {
+                        "badTitle":  "Passive Voice (Wordy \u0026 Indirect)",
+                        "badText":  "The argument was written by the student.",
+                        "goodTitle":  "Active Voice (Strong \u0026 Direct)",
+                        "goodText":  "The student \u003cspan class=\u0027highlight\u0027\u003ewrote\u003c/span\u003e the argument."
+                    },
+        "vocab":  {
+                      "term":  "Active / Passive",
+                      "languages":  {
+                                        "english":  {
+                                                        "definition":  "Active voice means the subject does the action (e.g., \u0027cat chased mouse\u0027). Passive voice means the subject receives the action (e.g., \u0027mouse was chased\u0027).",
+                                                        "example":  "Example: (Active) The student wrote the report. (Passive) The report was written by the student."
+                                                    },
+                                        "chinese":  {
+                                                        "definition":  "\u003cstrong\u003e主动/被动语态\u003c/strong\u003e：主动语态是主语执行动作；被动语态是主语承受动作。",
+                                                        "example":  "例句：（主动）学生写了报告。 （被动）报告是由学生写的。"
+                                                    },
+                                        "korean":  {
+                                                       "definition":  "\u003cstrong\u003e능동/수동\u003c/strong\u003e: 능동태는 주어가 직접 행동을 하는 것이고, 수동태는 주어가 행동을 받는 것입니다.",
+                                                       "example":  "예문: (능동) 학생이 보고서를 썼다. (수동) 보고서가 학생에 의해 쓰였다."
+                                                   }
+                                    }
+                  },
+        "ido":  [
+                    {
+                        "sentence":  "My opinion explains the issue clearly.",
+                        "prompt":  "Identify the voice of this sentence and explain why.",
+                        "answer":  "Active Voice. The subject (\u0027My opinion\u0027) performs the action (\u0027explains\u0027)."
+                    },
+                    {
+                        "sentence":  "The issue is explained by my opinion.",
+                        "prompt":  "Identify the voice of this sentence and explain why.",
+                        "answer":  "Passive Voice. The subject (\u0027The issue\u0027) receives the action (\u0027is explained by\u0027)."
+                    }
+                ],
+        "wedo":  [
+                     {
+                         "sentence":  "Her argument shows strong evidence.",
+                         "prompt":  "Identify the voice of this sentence.",
+                         "answer":  "Active Voice. (\u0027Her argument\u0027 performs the action \u0027shows\u0027)."
+                     },
+                     {
+                         "sentence":  "Helpful feedback is given by the teacher.",
+                         "prompt":  "Convert this passive sentence to active voice.",
+                         "answer":  "Active: \u0027The teacher gives helpful feedback.\u0027"
+                     }
+                 ],
+        "youdo":  [
+                      {
+                          "id":  1,
+                          "question":  "Convert to Active: \u0027The argument is supported by facts.\u0027",
+                          "instruction":  "Identify the actor (facts) and rewrite the sentence in active voice.",
+                          "answer":  "Facts support the argument."
+                      },
+                      {
+                          "id":  2,
+                          "question":  "Convert to Active: \u0027The opinion is strengthened by examples.\u0027",
+                          "instruction":  "Identify the actor (examples) and rewrite the sentence in active voice.",
+                          "answer":  "Examples strengthen the opinion."
+                      },
+                      {
+                          "id":  3,
+                          "question":  "Convert to Active: \u0027The idea is explained by the student.\u0027",
+                          "instruction":  "Identify the actor (the student) and rewrite the sentence in active voice.",
+                          "answer":  "The student explains the idea."
+                      },
+                      {
+                          "id":  4,
+                          "question":  "Identify the voice: \u0027Our group created a persuasive speech.\u0027",
+                          "instruction":  "Analyze whether the subject performs or receives the action.",
+                          "answer":  "Active Voice"
+                      },
+                      {
+                          "id":  5,
+                          "question":  "Convert to Active: \u0027The claim is supported by the author with evidence.\u0027",
+                          "instruction":  "Rewrite the sentence making the author the active subject.",
+                          "answer":  "The author supports the claim with evidence."
+                      }
+                  ]
+    },
+    {
+        "id":  6,
+        "title":  "Consistent Tense",
+        "subtitle":  "Verb Timeline Consistency",
+        "desc":  "Ensure writeups flow logically by maintaining consistent verb tenses and correcting unauthorized jumps between past and present.",
+        "objectives":  [
+                           "Consistent tense ensures events follow a clear timeline.",
+                           "Verbs must remain in the same tense (past, present, or future).",
+                           "Tense should only change when there is a logical shift in timeline."
+                       ],
+        "context":  {
+                        "badTitle":  "Inconsistent Shifts (Past \u0026 Present Clash)",
+                        "badText":  "Yesterday, I walked to the park. It\u0027s a sunny day, and I am enjoying the fresh air.",
+                        "goodTitle":  "Consistent Past Tense (Correct timeline)",
+                        "goodText":  "Yesterday, I walked to the park. It \u003cspan class=\u0027highlight\u0027\u003ewas\u003c/span\u003e a sunny day, and I \u003cspan class=\u0027highlight\u0027\u003ewas enjoying\u003c/span\u003e the fresh air."
+                    },
+        "vocab":  {
+                      "term":  "Consistent Tense",
+                      "languages":  {
+                                        "english":  {
+                                                        "definition":  "Consistent tense means keeping your verbs in the same timeline (past, present, or future) unless the time of the action actually changes.",
+                                                        "example":  "Example: Yesterday she played (past) and today she plays (present)."
+                                                    },
+                                        "chinese":  {
+                                                        "definition":  "\u003cstrong\u003e时态一致\u003c/strong\u003e：在句中保持相同的动词时态（过去式、现在式或将来式），除非动作的时间发生了改变。",
+                                                        "example":  "例句：昨天她弹了钢琴（过去式），今天她弹吉他（现在式）。"
+                                                    },
+                                        "korean":  {
+                                                       "definition":  "\u003cstrong\u003e시제 일관성\u003c/strong\u003e: 동작의 시간이 실제로 변하지 않는 한, 문장의 동사를 동일한 시간대(과거, 현재, 미래)로 유지하는 것입니다.",
+                                                       "example":  "예문: 어제 그녀는 피아노를 쳤고(과거), 오늘 그녀는 기타를 친다(현재)."
+                                                   }
+                                    }
+                  },
+        "ido":  [
+                    {
+                        "sentence":  "She told me that she is going to go to the concert last week.",
+                        "prompt":  "Explain the tense inconsistency in this sentence.",
+                        "answer":  "Inconsistent: \u0027told\u0027 (past) and \u0027is going\u0027 (present) conflict. Correct: \u0027She told me that she was going to go to the concert last week.\u0027"
+                    },
+                    {
+                        "sentence":  "I was excited to hear that and tell her that I went to the same concert.",
+                        "prompt":  "Correct the tense inconsistency in this sentence.",
+                        "answer":  "Inconsistent: \u0027tell\u0027 is present. Corrected: \u0027I was excited to hear that and told her that I went to the same concert...\u0027"
+                    }
+                ],
+        "wedo":  [
+                     {
+                         "sentence":  "Last night, I watched a movie, and it\u0027s so entertaining.",
+                         "prompt":  "Identify the inconsistency and convert the sentence fully to past tense.",
+                         "answer":  "Inconsistent: \u0027it\u0027s\u0027 (present). Corrected: \u0027Last night, I watched a movie, and it was so entertaining.\u0027"
+                     },
+                     {
+                         "sentence":  "Every morning, I pick fresh tomatoes, and they tasted delicious.",
+                         "prompt":  "Identify the inconsistency and convert the sentence fully to present tense.",
+                         "answer":  "Inconsistent: \u0027tasted\u0027 (past). Corrected: \u0027Every morning, I pick fresh tomatoes, and they taste delicious.\u0027"
+                     }
+                 ],
+        "youdo":  [
+                      {
+                          "id":  1,
+                          "question":  "Correct the tense: \u0027When I was a child, I love to play in the park.\u0027",
+                          "instruction":  "Align \u0027love\u0027 to match the past tense background.",
+                          "answer":  "When I was a child, I loved to play in the park."
+                      },
+                      {
+                          "id":  2,
+                          "question":  "Correct the tense: \u0027I received an email yesterday. She says that the class was cancelled.\u0027",
+                          "instruction":  "Correct the verb reporting yesterday\u0027s email.",
+                          "answer":  "I received an email yesterday. She said that the class was cancelled."
+                      },
+                      {
+                          "id":  3,
+                          "question":  "Correct the tense: \u0027Yesterday, I go for a run in the park.\u0027",
+                          "instruction":  "Fix the present verb describing yesterday.",
+                          "answer":  "Yesterday, I went for a run in the park."
+                      },
+                      {
+                          "id":  4,
+                          "question":  "Identify the tense: \u0027Several students demonstrated the experiment at assembly.\u0027",
+                          "instruction":  "Identify the primary tense of the sentence.",
+                          "answer":  "Past Tense"
+                      },
+                      {
+                          "id":  5,
+                          "question":  "Correct the tense: \u0027Yesterday, I walked to the park. It\u0027s a sunny day, and I am enjoying the fresh air.\u0027",
+                          "instruction":  "Convert the entire passage consistently into the past tense.",
+                          "answer":  "Yesterday, I walked to the park. It was a sunny day, and I was enjoying the fresh air."
+                      }
+                  ]
+    },
+    {
+        "id":  7,
+        "title":  "Mental Verbs",
+        "subtitle":  "Cognitive State Action",
+        "desc":  "Learn to identify mental state verbs (which occur in the mind) and use them to add emotional depth and intellectual clarity to your writing.",
+        "objectives":  [
+                           "Mental verbs show character thoughts, beliefs, and feelings.",
+                           "Mental verbs represent internal cognitive processes (like know, hope).",
+                           "They differ from action verbs which represent physical movements (like kick, run)."
+                       ],
+        "context":  {
+                        "badTitle":  "Physical Action Verb Only",
+                        "badText":  "The police officer walked to the courtroom and spoke about the case.",
+                        "goodTitle":  "Internal Mental State Verbs",
+                        "goodText":  "The police judge \u003cspan class=\u0027highlight\u0027\u003econsidered\u003c/span\u003e the right consequence and \u003cspan class=\u0027highlight-alt\u0027\u003edeliberated\u003c/span\u003e over the evidence."
+                    },
+        "vocab":  {
+                      "term":  "Mental Verb",
+                      "languages":  {
+                                        "english":  {
+                                                        "definition":  "A mental verb is an action word that describes thinking, feeling, or believing (things that happen inside your mind).",
+                                                        "example":  "Example: He remembered to pack his lunch."
+                                                    },
+                                        "chinese":  {
+                                                        "definition":  "\u003cstrong\u003e心理动词\u003c/strong\u003e：描述思考、感受或相信（在脑海中发生的事）的动作词。",
+                                                        "example":  "例句：他想起来（remembered）带午餐。"
+                                                    },
+                                        "korean":  {
+                                                       "definition":  "\u003cstrong\u003e심리 동사\u003c/strong\u003e: 생각하기, 느끼기, 또는 믿기와 같이 마음속에서 일어나는 행동을 나타내는 동사입니다.",
+                                                       "example":  "예문: 그는 점심을 싸야 한다는 것을 기억했다(remembered)."
+                                                   }
+                                    }
+                  },
+        "ido":  [
+                    {
+                        "sentence":  "The police judge considered the right consequence for the criminal.",
+                        "prompt":  "Identify the mental verb and what it describes.",
+                        "answer":  "Verb: \u0027considered\u0027. It describes a cognitive process of evaluation."
+                    },
+                    {
+                        "sentence":  "The mother contemplated her options for the weekend.",
+                        "prompt":  "Identify the mental verb and what it describes.",
+                        "answer":  "Verb: \u0027contemplated\u0027. It indicates the mother is thinking deeply."
+                    }
+                ],
+        "wedo":  [
+                     {
+                         "sentence":  "Sandra loathes pineapple on her pizza.",
+                         "prompt":  "Find the mental verb indicating a cognitive attitude.",
+                         "answer":  "Verb: \u0027loathes\u0027 (expresses strong cognitive dislike)."
+                     },
+                     {
+                         "sentence":  "I admire the work of the emergency service workers.",
+                         "prompt":  "Find the mental verb indicating respect.",
+                         "answer":  "Verb: \u0027admire\u0027 (cognitive feeling of respect)."
+                     }
+                 ],
+        "youdo":  [
+                      {
+                          "id":  1,
+                          "question":  "Identify the mental verb: \u0027He remembered to pack his lunch.\u0027",
+                          "instruction":  "Find the verb that represents a cognitive memory.",
+                          "answer":  "remembered"
+                      },
+                      {
+                          "id":  2,
+                          "question":  "Identify the mental verb: \u0027She stressed over the homework task.\u0027",
+                          "instruction":  "Find the verb indicating a mental state of anxiety.",
+                          "answer":  "stressed"
+                      },
+                      {
+                          "id":  3,
+                          "question":  "Is \u0027kicked\u0027 a mental verb: \u0027He kicked the ball into the net.\u0027",
+                          "instruction":  "State whether \u0027kicked\u0027 represents physical or mental action.",
+                          "answer":  "No, \u0027kicked\u0027 is a physical action verb."
+                      },
+                      {
+                          "id":  4,
+                          "question":  "Identify the mental verb: \u0027I adore the smell of freshly cut grass.\u0027",
+                          "instruction":  "Identify the verb indicating emotional preference.",
+                          "answer":  "adore"
+                      },
+                      {
+                          "id":  5,
+                          "question":  "Identify the mental verb: \u0027They hoped they would get into the finals.\u0027",
+                          "instruction":  "Identify the verb representing desire or expectation.",
+                          "answer":  "hoped"
+                      }
+                  ]
+    },
+    {
+        "id":  8,
+        "title":  "Transitive \u0026 Intransitive",
+        "subtitle":  "Verb Direct Objects",
+        "desc":  "Learn to distinguish between transitive verbs (which require direct objects) and intransitive verbs (which stand alone).",
+        "objectives":  [
+                           "Transitive verbs require direct objects to complete their meaning.",
+                           "Intransitive verbs express a complete thought without any object.",
+                           "Direct objects receive the action transferred by the transitive verb."
+                       ],
+        "context":  {
+                        "badTitle":  "Incomplete Transitive (No Object)",
+                        "badText":  "Liz contained.",
+                        "goodTitle":  "Complete Transitive (With Direct Object)",
+                        "goodText":  "Liz contained \u003cspan class=\u0027highlight\u0027\u003eher excitement\u003c/span\u003e."
+                    },
+        "vocab":  {
+                      "term":  "Transitive Verb",
+                      "languages":  {
+                                        "english":  {
+                                                        "definition":  "A transitive verb needs an object to receive its action (e.g., \u0027kicked the ball\u0027). An intransitive verb does not need an object (e.g., \u0027she laughed\u0027).",
+                                                        "example":  "Example: sells (transitive - sells meat) vs. disappeared (intransitive - magician disappeared)."
+                                                    },
+                                        "chinese":  {
+                                                        "definition":  "\u003cstrong\u003e及物/不及物动词\u003c/strong\u003e：及物动词需要宾语来接收动作（如‘踢球’）；不及物动词不需要宾语（如‘她笑了’）。",
+                                                        "example":  "例句：卖（及物 - 卖肉） 对比 消失（不及物 - 魔术师消失了）。"
+                                                    },
+                                        "korean":  {
+                                                       "definition":  "\u003cstrong\u003e타동사/자동사\u003c/strong\u003e: 타동사는 행동을 받는 대상(목적어)이 필요하고(예: \u0027공을 찼다\u0027), 자동사는 대상이 필요 없습니다(예: \u0027그녀가 웃었다\u0027).",
+                                                       "example":  "예문: 판다(타동사 - 고기를 판다) vs 사라졌다(자동사 - 마술사가 사라졌다)."
+                                                   }
+                                    }
+                  },
+        "ido":  [
+                    {
+                        "sentence":  "The teacher explained the new concept to the students.",
+                        "prompt":  "Identify the verb, specify its type, and name the direct object.",
+                        "answer":  "Verb: \u0027explained\u0027 (Transitive). Object: \u0027the new concept\u0027."
+                    },
+                    {
+                        "sentence":  "The baseball player caught the baseball.",
+                        "prompt":  "Identify the verb, specify its type, and name the direct object.",
+                        "answer":  "Verb: \u0027caught\u0027 (Transitive). Object: \u0027the baseball\u0027."
+                    }
+                ],
+        "wedo":  [
+                     {
+                         "sentence":  "The witness described the crime.",
+                         "prompt":  "Identify the transitive verb and the direct object.",
+                         "answer":  "Verb: \u0027described\u0027 (Transitive). Object: \u0027the crime\u0027."
+                     },
+                     {
+                         "sentence":  "The terrified rat squealed.",
+                         "prompt":  "Identify the verb and specify if it is transitive or intransitive.",
+                         "answer":  "Verb: \u0027squealed\u0027 (Intransitive). It requires no object."
+                     }
+                 ],
+        "youdo":  [
+                      {
+                          "id":  1,
+                          "question":  "Identify the transitive verb and direct object: \u0027His friend hugged him tightly.\u0027",
+                          "instruction":  "Identify the verb transferring action and the recipient pronoun.",
+                          "answer":  "Transitive Verb: hugged. Direct Object: him."
+                      },
+                      {
+                          "id":  2,
+                          "question":  "Identify the transitive verb and direct object: \u0027The butcher sells meat.\u0027",
+                          "instruction":  "Identify the verb transferring action and the recipient noun.",
+                          "answer":  "Transitive Verb: sells. Direct Object: meat."
+                      },
+                      {
+                          "id":  3,
+                          "question":  "Is \u0027disappeared\u0027 transitive or intransitive: \u0027The magician disappeared.\u0027",
+                          "instruction":  "Analyze if the verb requires an object to make sense.",
+                          "answer":  "Intransitive"
+                      },
+                      {
+                          "id":  4,
+                          "question":  "Is \u0027dreamed\u0027 transitive or intransitive: \u0027The young girl dreamed.\u0027",
+                          "instruction":  "Analyze if the verb requires an object to make sense.",
+                          "answer":  "Intransitive"
+                      },
+                      {
+                          "id":  5,
+                          "question":  "Is this sentence correct: \u0027Liz contained.\u0027",
+                          "instruction":  "Explain the grammatical status of the sentence.",
+                          "answer":  "No. \u0027Contained\u0027 is transitive and requires a direct object (e.g. \u0027Liz contained her laugh\u0027)."
+                      }
+                  ]
+    },
+    {
+        "id":  9,
+        "title":  "Appositives",
+        "subtitle":  "Noun Phrase Renaming",
+        "desc":  "Rename and explain nouns using appositive phrases, and learn the correct comma rules to set them off.",
+        "objectives":  [
+                           "Appositives rename and describe nouns using commas.",
+                           "An appositive is a noun phrase set beside another noun to rename it.",
+                           "Removing the appositive phrase leaves the sentence grammatically complete."
+                       ],
+        "context":  {
+                        "badTitle":  "Flat Description (No Appositive)",
+                        "badText":  "The dog barked at the mail carrier and it is a golden retriever.",
+                        "goodTitle":  "Appositive Structure",
+                        "goodText":  "The dog, \u003cspan class=\u0027highlight\u0027\u003ea golden retriever\u003c/span\u003e, barked at the mail carrier."
+                    },
+        "vocab":  {
+                      "term":  "Appositive",
+                      "languages":  {
+                                        "english":  {
+                                                        "definition":  "An appositive is a noun phrase placed next to another noun to rename or describe it (e.g., \u0027My dog, a golden retriever, barked\u0027).",
+                                                        "example":  "Example: The book, a mystery novel, kept me hooked."
+                                                    },
+                                        "chinese":  {
+                                                        "definition":  "\u003cstrong\u003e同位语\u003c/strong\u003e：放在另一个名词旁以重新命名或描述它的名词短语（如‘我的狗，一只金毛犬，叫了’）。",
+                                                        "example":  "例句：那本书，一本悬疑小说，让我爱不释手。"
+                                                    },
+                                        "korean":  {
+                                                       "definition":  "\u003cstrong\u003e동격어\u003c/strong\u003e: 명사 바로 옆에 붙어 그 명사를 재정의하거나 설명해 주는 명사구입니다(예: \u0027내 개, 골든 리트리버가, 짖었다\u0027).",
+                                                       "example":  "예문: 그 책, 추리 소설은, 나를 몰입시켰다."
+                                                   }
+                                    }
+                  },
+        "ido":  [
+                    {
+                        "sentence":  "The dog, a golden retriever, happily fetched the stick.",
+                        "prompt":  "Identify the appositive phrase and the noun it renames.",
+                        "answer":  "Appositive: \u0027a golden retriever\u0027. It renames the noun \u0027The dog\u0027."
+                    },
+                    {
+                        "sentence":  "My best friend, a talented musician, plays the guitar.",
+                        "prompt":  "Identify the appositive phrase and state how it is punctuated.",
+                        "answer":  "Appositive: \u0027a talented musician\u0027. Punctuated with commas before and after."
+                    }
+                ],
+        "wedo":  [
+                     {
+                         "sentence":  "The book, a thrilling mystery novel, kept me hooked.",
+                         "prompt":  "Find the appositive and test what happens if you remove it.",
+                         "answer":  "Appositive: \u0027a thrilling mystery novel\u0027. Without it, the sentence remains complete."
+                     },
+                     {
+                         "sentence":  "Dr. Adams, the leading syntactician, explained the tree diagram.",
+                         "prompt":  "Identify the appositive phrase describing Dr. Adams.",
+                         "answer":  "Appositive: \u0027the leading syntactician\u0027."
+                     }
+                 ],
+        "youdo":  [
+                      {
+                          "id":  1,
+                          "question":  "Identify the appositive: \u0027Our classroom projector, a dual-laser system, was extremely bright.\u0027",
+                          "instruction":  "Find the noun phrase renaming the projector.",
+                          "answer":  "a dual-laser system"
+                      },
+                      {
+                          "id":  2,
+                          "question":  "Identify the appositive: \u0027A champion high-jumper, Elena cleared the bar with ease.\u0027",
+                          "instruction":  "Find the introductory renaming noun phrase.",
+                          "answer":  "A champion high-jumper"
+                      },
+                      {
+                          "id":  3,
+                          "question":  "Add commas: \u0027Mr. Davis our soccer coach blew the silver whistle.\u0027",
+                          "instruction":  "Place commas to offset the appositive phrase.",
+                          "answer":  "Mr. Davis, our soccer coach, blew the silver whistle."
+                      },
+                      {
+                          "id":  4,
+                          "question":  "Identify the noun phrase described: \u0027My favorite snack, salty popcorn, was sold out.\u0027",
+                          "instruction":  "Identify the noun phrase that the appositive renames.",
+                          "answer":  "My favorite snack"
+                      },
+                      {
+                          "id":  5,
+                          "question":  "Is the bracketed phrase an appositive: \u0027The movie [we watched last night] was exciting.\u0027",
+                          "instruction":  "Explain why the bracketed words are or are not an appositive.",
+                          "answer":  "No, it is a relative clause because it starts with a relative pronoun (implied \u0027that\u0027) and contains a subject and verb."
+                      }
+                  ]
+    },
+    {
+        "id":  10,
+        "title":  "Sentence Combining",
+        "subtitle":  "Syntactic Integration",
+        "desc":  "Combine multiple short, choppy sentences into a single elegant complex sentence using appositives, clauses, and conjunctions.",
+        "objectives":  [
+                           "Sentence combining merges short clauses into cohesive sentences.",
+                           "Combining thoughts reduces redundancies and creates a professional flow.",
+                           "We can combine clauses using conjunctions, relative clauses, or appositives."
+                       ],
+        "context":  {
+                        "badTitle":  "Choppy Flow (Separate Sentences)",
+                        "badText":  "Rotorua has bubbling mud pools. Rotorua is a popular tourist destination. The geothermal area is fascinating.",
+                        "goodTitle":  "Integrated Flow (Combined Sentence)",
+                        "goodText":  "Rotorua, \u003cspan class=\u0027highlight\u0027\u003ea popular tourist destination\u003c/span\u003e, is fascinating and has bubbling mud pools, \u003cspan class=\u0027highlight-alt\u0027\u003eas many visitors come to see its geothermal features\u003c/span\u003e."
+                    },
+        "vocab":  {
+                      "term":  "Sentence Combining",
+                      "languages":  {
+                                        "english":  {
+                                                        "definition":  "Sentence combining is joining short, choppy sentences into longer, smoother sentences using linking words or clauses.",
+                                                        "example":  "Example: The cheetah is the fastest animal + it hunts antelopes = The cheetah, the fastest animal, hunts antelopes."
+                                                    },
+                                        "chinese":  {
+                                                        "definition":  "\u003cstrong\u003e合并句子\u003c/strong\u003e：利用连接词或从句，将简短、零碎的句子连成更长、更流畅的句子。",
+                                                        "example":  "例句：猎豹是最快的动物 + 它捕食羚羊 = 猎豹，作为最快的动物，捕食羚羊。"
+                                                    },
+                                        "korean":  {
+                                                       "definition":  "\u003cstrong\u003e문장 결합\u003c/strong\u003e: 연결 단어(접속사)나 절을 사용하여 짧고 끊어지는 문장들을 더 길고 부드러운 문장으로 합치는 것입니다.",
+                                                       "example":  "예문: 치타는 가장 빠른 동물이다 + 치타는 영양을 사냥한다 = 가장 빠른 동물인 치타는 영양을 사냥한다."
+                                                   }
+                                    }
+                  },
+        "ido":  [
+                    {
+                        "sentence":  "The Waipoua Forest, a protected conservation area, is beautiful and has a highly diverse ecosystem.",
+                        "prompt":  "Identify the sentence combining strategies used.",
+                        "answer":  "Appositive (\u0027a protected conservation area\u0027) and coordinate conjunction (\u0027and\u0027) to merge facts."
+                    },
+                    {
+                        "sentence":  "Rotorua, a popular tourist destination, has bubbling mud pools, as visitors come to see its geothermal features.",
+                        "prompt":  "Identify the appositive and the conjunction used.",
+                        "answer":  "Appositive: \u0027a popular tourist destination\u0027. Conjunction: \u0027as\u0027."
+                    }
+                ],
+        "wedo":  [
+                     {
+                         "sentence":  "The Asian Elephant, the smallest of the elephant species, is critically endangered.",
+                         "prompt":  "Find the appositive phrase used to combine the source sentences.",
+                         "answer":  "Appositive: \u0027the smallest of the elephant species\u0027."
+                     },
+                     {
+                         "sentence":  "The Kiwi, a national symbol of New Zealand, is a nocturnal bird.",
+                         "prompt":  "Find the appositive phrase in this combined sentence.",
+                         "answer":  "Appositive: \u0027a national symbol of New Zealand\u0027."
+                     }
+                 ],
+        "youdo":  [
+                      {
+                          "id":  1,
+                          "question":  "Combine: \u0027The cheetah is the fastest land animal. It can reach speeds of 120 km/h. It hunts antelopes. It lives in Africa.\u0027",
+                          "instruction":  "Integrate these facts into a single fluent sentence using appositives and conjunctions.",
+                          "answer":  "The cheetah, the fastest land animal, can reach speeds of up to 120 km/h, hunts antelopes, and lives in Africa."
+                      },
+                      {
+                          "id":  2,
+                          "question":  "Combine: \u0027The library closes at 5 p.m. I have homework to finish. I want to borrow a book. I don’t want to be late.\u0027",
+                          "instruction":  "Combine these using a relative clause and a subordinating conjunction.",
+                          "answer":  "I want to borrow a book from the library, which closes at 5 p.m., because I have homework to finish and I don’t want to be late."
+                      },
+                      {
+                          "id":  3,
+                          "question":  "Combine: \u0027The rainforest is home to many animals. It produces oxygen for the planet. People cut down trees there. It affects the climate.\u0027",
+                          "instruction":  "Combine these using a relative clause and a coordinating conjunction.",
+                          "answer":  "The rainforest, which produces oxygen for the planet, is home to many animals, but people cut down trees there, which affects the climate."
+                      },
+                      {
+                          "id":  4,
+                          "question":  "Combine: \u0027The Eiffel Tower was built in 1887 in Paris. It was built to celebrate the French Revolution. It was once the tallest building.\u0027",
+                          "instruction":  "Combine these using an appositive phrase.",
+                          "answer":  "The Eiffel Tower, once the tallest building in the world, was built in 1887 in Paris to celebrate the centennial of the French Revolution."
+                      },
+                      {
+                          "id":  5,
+                          "question":  "Combine: \u0027The New Zealand Bill of Rights Act protects citizens\u0027 rights. It outlines the responsibilities of the government. The act was passed in 1990.\u0027",
+                          "instruction":  "Combine these using a relative clause and a coordinating conjunction.",
+                          "answer":  "The New Zealand Bill of Rights Act, which was passed in 1990, protects citizens’ rights and outlines the responsibilities of the government."
+                      }
+                  ]
+    }
+];
+    /************************************************************
+     * STATE MANAGEMENT & APPLICATION LOGIC
+     ************************************************************/
+    let currentSlide = 0;           // 0 is Dashboard, 1-21 are lesson slides
+    let selectedLessonIndex = -1;  // -1 means no lesson selected, 0-9 for lessons
+    let activeSlides = [];          // dynamic compiled slides for active lesson
+    let timerSeconds = 0;
+    let lastScrollTime = 0;
+    const scrollCooldown = 800;     // prevent fast scroll skipping
+    let timerInterval = null;
+    let overlayActive = false;
+
+    // DOM Elements
+    const dashboardGrid = document.getElementById('dashboard-grid');
+    const progressBar = document.getElementById('progress-bar');
+    const slideIndicator = document.getElementById('slide-indicator');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const homeBtn = document.getElementById('home-btn');
+    const timerDisplay = document.getElementById('timer-display');
+    const navControls = document.getElementById('nav-controls');
+    const deckContainer = document.querySelector('.deck-container');
+    const superOverlay = document.getElementById('super-reveal-overlay');
+    const superOverlayText = document.getElementById('super-reveal-text');
+
+    // Render Lesson Selector cards
+    function initDashboard() {
+      dashboardGrid.innerHTML = '';
+      LESSONS.forEach((lesson, index) => {
+        const card = document.createElement('div');
+        card.className = 'lesson-card';
+        card.innerHTML = `
+          <div class="lesson-card-num">Lesson ${lesson.id}</div>
+          <div class="lesson-card-title">${lesson.title}</div>
+          <div class="lesson-card-desc">${lesson.desc}</div>
+        `;
+        card.addEventListener('click', () => selectLesson(index));
+        dashboardGrid.appendChild(card);
+      });
+    }
+
+    // Handle Lesson Selection
+    function selectLesson(index) {
+      selectedLessonIndex = index;
+      const lesson = LESSONS[selectedLessonIndex];
+      
+      // Compile dynamic slides (21 slides)
+      activeSlides = compileLessonSlides(lesson);
+      
+      // Render slide DOM nodes
+      renderSlides(activeSlides);
+
+      // Reset pacing timer to 00:00 for this lesson and start counting
+      resetTimer();
+      startTimerLoop();
+
+      // Show slide controls, show home button
+      navControls.style.display = 'flex';
+      homeBtn.style.display = 'flex';
+
+      // Transition to Slide 1 (Objectives)
+      goToSlide(1);
+    }
+
+    // Dynamic slide compiler
+    function compileLessonSlides(lesson) {
+      const slidesList = [];
+      
+      // Slide 1: Lesson Title
+      slidesList.push({
+        type: "title",
+        title: lesson.title,
+        subtitle: `Lesson ${lesson.id}: ${lesson.subtitle}`,
+        text: `Today we are learning to master ${lesson.title.toLowerCase()} in our writing.`
+      });
+      
+      // Slides 2-4: Objectives (One per slide!)
+      lesson.objectives.forEach((obj, idx) => {
+        slidesList.push({
+          type: "objective",
+          title: `Learning Goal ${idx + 1}`,
+          text: obj
+        });
+      });
+      
+      // Slide 5: Context (Choppy/Bad)
+      slidesList.push({
+        type: "context",
+        title: "Why it matters: Choppy Flow",
+        text: lesson.context.badText,
+        label: lesson.context.badTitle,
+        isBad: true
+      });
+      
+      // Slide 6: Context (Elegant/Good)
+      slidesList.push({
+        type: "context",
+        title: "Why it matters: Elegant Flow",
+        text: lesson.context.goodText,
+        label: lesson.context.goodTitle,
+        isBad: false
+      });
+      
+      // Slide 7: Vocabulary
+      slidesList.push({
+        type: "vocab",
+        title: "Vocabulary",
+        term: lesson.vocab.term,
+        languages: lesson.vocab.languages
+      });
+      
+      // Slides 8-11: I Do (Question followed by Answer slide!)
+      lesson.ido.forEach((ex, idx) => {
+        // Question Slide
+        slidesList.push({
+          type: "ido-q",
+          title: "I Do",
+          sentence: ex.sentence,
+          prompt: ex.prompt
+        });
+        // Answer Slide
+        slidesList.push({
+          type: "ido-a",
+          title: "I Do (Answer)",
+          answer: ex.answer
+        });
+      });
+      
+      // Slides 12-15: We Do (Question followed by Answer slide!)
+      lesson.wedo.forEach((ex, idx) => {
+        // Question Slide
+        slidesList.push({
+          type: "wedo-q",
+          title: "We Do",
+          sentence: ex.sentence,
+          prompt: ex.prompt
+        });
+        // Answer Slide
+        slidesList.push({
+          type: "wedo-a",
+          title: "We Do (Answer)",
+          answer: ex.answer
+        });
+      });
+      
+      // Slides 16-20: You Do (One per slide!)
+      lesson.youdo.forEach((q, idx) => {
+        slidesList.push({
+          type: "youdo",
+          id: q.id,
+          title: "You Do",
+          question: q.question,
+          instruction: q.instruction,
+          answer: q.answer,
+          questionIndex: idx
+        });
+      });
+      
+      // Slide 21: Review
+      slidesList.push({
+        type: "review",
+        title: "Review"
+      });
+      
+      return slidesList;
+    }
+
+    // Dynamic slide renderer
+    function renderSlides(slidesList) {
+      const existingSlides = deckContainer.querySelectorAll('.slide:not(#slide-dashboard)');
+      existingSlides.forEach(s => s.remove());
+      
+      slidesList.forEach((slide, idx) => {
+        const slideIndex = idx + 1;
+        const slideNode = document.createElement('section');
+        slideNode.className = 'slide future';
+        slideNode.id = `slide-${slideIndex}`;
+        
+        let html = '';
+        
+        if (slide.type === 'title') {
+          html = `
+            <div class="card">
+              <h2>${slide.subtitle}</h2>
+              <div class="card-body">
+                <h1>${slide.title}</h1>
+                <div class="slide-primary-text" style="font-size: clamp(2.2rem, 3.2vw, 4.2rem); font-weight: 500; margin-top: 1rem;">${slide.text}</div>
+              </div>
+            </div>
+          `;
+        } else if (slide.type === 'objective') {
+          html = `
+            <div class="card">
+              <h2>${slide.title}</h2>
+              <div class="card-body">
+                <div class="slide-primary-text">${slide.text}</div>
+              </div>
+            </div>
+          `;
+        } else if (slide.type === 'context') {
+          const colClass = slide.isBad ? 'bad' : 'good';
+          const headerClass = slide.isBad ? 'bad-text' : 'good-text';
+          html = `
+            <div class="card">
+              <h2>${slide.title}</h2>
+              <div class="card-body" style="width: 100%;">
+                <div class="comparison-col ${colClass}" style="width: 100%; text-align: center;">
+                  <div class="comparison-header ${headerClass}" style="font-size: 2.2rem; margin-bottom: 1.5rem;">${slide.label}</div>
+                  <div class="slide-primary-text">${slide.text}</div>
+                </div>
+              </div>
+            </div>
+          `;
+        } else if (slide.type === 'vocab') {
+          html = `
+            <div class="card">
+              <h2>${slide.title}</h2>
+              <div class="card-body" style="gap: 1.2rem;">
+                <div class="vocab-term">${slide.term}</div>
+                <div class="toggle-group">
+                  <button class="toggle-btn active" onclick="setLanguage('english', event)">English</button>
+                  <button class="toggle-btn" onclick="setLanguage('chinese', event)">Chinese</button>
+                  <button class="toggle-btn" onclick="setLanguage('korean', event)">Korean</button>
+                </div>
+                <div class="vocab-definition-box">
+                  <div class="vocab-definition" id="vocab-definition" style="font-size: clamp(2.2rem, 3.4vw, 4.8rem); font-weight: 600;">--</div>
+                  <div class="vocab-example" id="vocab-example" style="font-size: clamp(1.8rem, 2.6vw, 3.8rem); margin-top: 1.2rem;">--</div>
+                </div>
+              </div>
+            </div>
+          `;
+        } else if (slide.type === 'ido-q' || slide.type === 'wedo-q') {
+          html = `
+            <div class="card">
+              <h2>${slide.title}</h2>
+              <div class="card-body">
+                <div class="examples-container">
+                  <div class="example-block" style="border: none; background: transparent; padding: 0;">
+                    <div class="slide-primary-text">${slide.sentence}</div>
+                    <div class="example-prompt" style="font-size: clamp(1.8rem, 2.5vw, 3.2rem); text-align: center; color: var(--text-secondary); margin-top: 1.5rem;">${slide.prompt}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        } else if (slide.type === 'ido-a' || slide.type === 'wedo-a') {
+          html = `
+            <div class="card" style="justify-content: center; align-items: center; border: 1px solid rgba(34, 197, 94, 0.2); box-shadow: 0 0 40px rgba(34, 197, 94, 0.05);">
+              <h2>${slide.title}</h2>
+              <div class="card-body" style="justify-content: center; align-items: center; flex: 1; width: 100%;">
+                <div class="slide-primary-text" style="font-size: clamp(3rem, 4.5vw, 6rem); color: var(--color-green); font-weight: 700; text-align: center; line-height: 1.4; width: 100%; max-width: 1600px; word-wrap: break-word;">${slide.answer}</div>
+              </div>
+            </div>
+          `;
+        } else if (slide.type === 'youdo') {
+          html = `
+            <div class="youdo-layout">
+              <div class="card youdo-main-card">
+                <h2>${slide.title}</h2>
+                <div class="card-body">
+                  <div class="slide-primary-text" style="margin-bottom: 2rem;">${slide.question}</div>
+                  <button class="reveal-btn" style="margin: 0 auto; display: block;">Reveal Answer</button>
+                </div>
+              </div>
+              
+              <div class="youdo-footer">
+                <div class="youdo-footer-title" style="${slide.questionIndex === 0 ? 'display:none;' : ''}">Previous Questions</div>
+                <div class="prev-questions-row">
+                  ${renderPrecedingQuestions(slide.questionIndex)}
+                </div>
+              </div>
+            </div>
+          `;
+        } else if (slide.type === 'review') {
+          html = `
+            <div class="card" style="height: 86vh;">
+              <h2>${slide.title}</h2>
+              <div class="card-body" style="width: 100%; display: block; overflow-y: auto; padding-right: 10px;">
+                <div class="review-grid">
+                  ${renderReviewGrid()}
+                </div>
+              </div>
+            </div>
+          `;
+        }
+        
+        slideNode.innerHTML = html;
+
+        const revealBtn = slideNode.querySelector('.reveal-btn');
+        if (revealBtn && slide.answer) {
+          revealBtn.addEventListener('click', (event) => {
+            showAnswerOverlay(slide.answer, event);
+          });
+        }
+
+        deckContainer.appendChild(slideNode);
+      });
+    }
+
+    // Helper: Render Completed Question Badges in You Do Footer
+    function renderPrecedingQuestions(qIndex) {
+      if (qIndex === 0 || selectedLessonIndex === -1) return '';
+      const lesson = LESSONS[selectedLessonIndex];
+      let badgesHtml = '';
+      for (let i = 0; i < qIndex; i++) {
+        const prevQ = lesson.youdo[i];
+        const cleanQ = prevQ.question.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ');
+        const tooltipText = `Question ${prevQ.id}: ${cleanQ} (Click to review)`;
+        const cleanAnswer = prevQ.answer.replace(/<[^>]*>/g, '');
+        badgesHtml += `
+          <div class="prev-q-badge" title="${escapeHtmlAttr(tooltipText)}" onclick="jumpToYouDoQuestion(${i}, event)">
+            <span class="prev-badge-num">Q${prevQ.id}: ${escapeHtmlAttr(cleanQ.substring(0, 18))}...</span>
+            <span class="prev-badge-text">Answer: ${escapeHtmlAttr(cleanAnswer)}</span>
+          </div>
+        `;
+      }
+      return badgesHtml;
+    }
+
+    function jumpToYouDoQuestion(qIndex, event) {
+      if (event) event.stopPropagation();
+      const slideIdx = activeSlides.findIndex(s => s.type === 'youdo' && s.questionIndex === qIndex);
+      if (slideIdx !== -1) {
+        goToSlide(slideIdx + 1); // 1-based index (Slide 0 is dashboard)
+      }
+    }
+
+    // Helper: Render Review Slide grid
+    function renderReviewGrid() {
+      if (selectedLessonIndex === -1) return '';
+      const lesson = LESSONS[selectedLessonIndex];
+      let gridHtml = '';
+      lesson.youdo.forEach(item => {
+        gridHtml += `
+          <div class="review-item">
+            <div class="review-q-num">Question ${item.id}</div>
+            <div class="review-q-text" style="font-size: 1.6rem;">${item.question}</div>
+            <div class="review-q-answer" style="font-size: 1.7rem;">&#128273; Answer: ${item.answer}</div>
+          </div>
+        `;
+      });
+      return gridHtml;
+    }
+
+    // Super Reveal overlay triggers
+    window.showAnswerOverlay = function(answerText, event) {
+      if (event) event.stopPropagation();
+      superOverlayText.innerHTML = answerText;
+      superOverlay.style.display = 'flex';
+      superOverlay.offsetHeight;
+      superOverlay.classList.add('active');
+      overlayActive = true;
+    };
+
+    window.dismissAnswerOverlay = function() {
+      superOverlay.classList.remove('active');
+      setTimeout(() => {
+        if (!superOverlay.classList.contains('active')) {
+          superOverlay.style.display = 'none';
+        }
+      }, 300);
+      overlayActive = false;
+    };
+
+    // Set Vocabulary Language Display
+    window.setLanguage = function(lang, event) {
+      if (event) event.stopPropagation();
+      if (selectedLessonIndex === -1) return;
+      const vocab = LESSONS[selectedLessonIndex].vocab;
+      
+      const buttons = document.querySelectorAll('.toggle-btn');
+      buttons.forEach(btn => {
+        if (btn.textContent.toLowerCase().includes(lang)) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      const defBox = document.getElementById('vocab-definition');
+      const exBox = document.getElementById('vocab-example');
+      
+      if (defBox && exBox) {
+        defBox.style.opacity = '0';
+        exBox.style.opacity = '0';
+        
+        setTimeout(() => {
+          defBox.innerHTML = vocab.languages[lang].definition;
+          exBox.innerHTML = vocab.languages[lang].example;
+          defBox.style.opacity = '1';
+          exBox.style.opacity = '1';
+        }, 150);
+      }
+    };
+
+    // Navigation core function
+    function goToSlide(index) {
+      currentSlide = index;
+      const slideElements = document.querySelectorAll('.slide');
+      
+      slideElements.forEach((slide, i) => {
+        slide.classList.remove('active', 'past', 'future');
+        if (i === currentSlide) {
+          slide.classList.add('active');
+        } else if (i < currentSlide) {
+          slide.classList.add('past');
+        } else {
+          slide.classList.add('future');
+        }
+      });
+
+      if (currentSlide === 0) {
+        navControls.style.display = 'none';
+        homeBtn.style.display = 'none';
+        timerDisplay.style.display = 'none';
+        progressBar.style.width = '0%';
+      } else {
+        navControls.style.display = 'flex';
+        homeBtn.style.display = 'flex';
+        timerDisplay.style.display = 'flex';
+        
+        if (currentSlide === 7) {
+          setLanguage('english');
+        }
+        updateProgress();
+      }
+    }
+
+    function navigateForward() {
+      if (currentSlide === 0) return;
+      const slideElements = document.querySelectorAll('.slide');
+      if (currentSlide < slideElements.length - 1) {
+        goToSlide(currentSlide + 1);
+      }
+    }
+
+    function navigateBackward() {
+      if (currentSlide === 0) return;
+      goToSlide(currentSlide - 1);
+    }
+
+    function updateProgress() {
+      if (selectedLessonIndex === -1 || currentSlide === 0) return;
+      const slideElements = document.querySelectorAll('.slide');
+      const totalSlides = slideElements.length - 1;
+      const percentage = ((currentSlide - 1) / (totalSlides - 1)) * 100;
+      progressBar.style.width = `${percentage}%`;
+
+      const currentSlideObj = activeSlides[currentSlide - 1];
+      let label = "Slide";
+      if (currentSlideObj) {
+        if (currentSlideObj.type === 'title') label = "Title";
+        else if (currentSlideObj.type === 'objective') label = "Objective";
+        else if (currentSlideObj.type === 'context') label = "Context";
+        else if (currentSlideObj.type === 'vocab') label = "Vocabulary";
+        else if (currentSlideObj.type.startsWith('ido')) label = "I Do";
+        else if (currentSlideObj.type.startsWith('wedo')) label = "We Do";
+        else if (currentSlideObj.type === 'youdo') label = `You Do (Q${currentSlideObj.id})`;
+        else if (currentSlideObj.type === 'review') label = "Review Key";
+      }
+      
+      slideIndicator.textContent = `${label} (${currentSlide}/${totalSlides})`;
+      prevBtn.disabled = (currentSlide === 1);
+      nextBtn.disabled = (currentSlide === totalSlides);
+    }
+
+    // Home button click
+    homeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      selectedLessonIndex = -1;
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      goToSlide(0);
+    });
+
+    /************************************************************
+     * WHEEL SCROLL & PRESENTATION REMOTES
+     ************************************************************/
+    window.addEventListener('wheel', (e) => {
+      if (overlayActive) {
+        dismissAnswerOverlay();
+        e.preventDefault();
+        return;
+      }
+      
+      if (currentSlide === 0) return;
+      
+      const now = Date.now();
+      if (now - lastScrollTime < scrollCooldown) return;
+      
+      if (e.deltaY > 0) {
+        navigateForward();
+      } else if (e.deltaY < 0) {
+        navigateBackward();
+      }
+      
+      lastScrollTime = now;
+    }, { passive: false });
+
+    window.addEventListener('keydown', (e) => {
+      if (overlayActive) {
+        dismissAnswerOverlay();
+        e.preventDefault();
+        return;
+      }
+
+      if (currentSlide === 0) return;
+
+      const keysForward = ['ArrowDown', 'ArrowRight', 'PageDown', ' ', 'Enter'];
+      const keysBackward = ['ArrowUp', 'ArrowLeft', 'PageUp', 'Backspace'];
+
+      if (keysForward.includes(e.key)) {
+        navigateForward();
+        e.preventDefault();
+      } else if (keysBackward.includes(e.key)) {
+        navigateBackward();
+        e.preventDefault();
+      }
+    });
+
+    superOverlay.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dismissAnswerOverlay();
+    });
+
+    window.addEventListener('click', (e) => {
+      if (overlayActive) {
+        e.stopPropagation();
+        dismissAnswerOverlay();
+      }
+    });
+
+    // Control buttons clicks
+    prevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      navigateBackward();
+    });
+    nextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      navigateForward();
+    });
+
+    /************************************************************
+     * PACING TIMER LOGIC
+     ************************************************************/
+    function escapeHtmlAttr(str) {
+      if (!str) return '';
+      return str.replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+    }
+
+    function formatTime(totalSec) {
+      const mins = Math.floor(totalSec / 60);
+      const secs = totalSec % 60;
+      return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function resetTimer() {
+      timerSeconds = 0;
+      timerDisplay.textContent = "00:00";
+      timerDisplay.className = 'green';
+    }
+
+    function startTimerLoop() {
+      if (timerInterval) clearInterval(timerInterval);
+      
+      timerInterval = setInterval(() => {
+        timerSeconds++;
+        timerDisplay.textContent = formatTime(timerSeconds);
+
+        // Color thresholds
+        timerDisplay.className = '';
+        if (timerSeconds <= 600) {
+          timerDisplay.classList.add('green');
+        } else if (timerSeconds <= 780) {
+          timerDisplay.classList.add('orange');
+        } else {
+          timerDisplay.classList.add('red');
+        }
+      }, 1000);
+    }
+
+    // Initialize App
+    initDashboard();
+    goToSlide(0);
+
+  </script>
+</body>
+</html>
