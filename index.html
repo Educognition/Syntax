@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Classroom Syntax Suite: 10 Interactive Lessons</title>
+  <title>Classroom Syntax Suite: 11 Interactive Lessons</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="A premium, interactive classroom slide deck containing 10 syntax lessons. Optimized for 1080p displays with hover-to-zoom magnification, full-screen Super Reveal overlay, pacing timer, and minimalist controls.">
+  <meta name="description" content="A premium, interactive classroom slide deck containing 11 syntax lessons. Optimized for 1080p displays with hover-to-zoom magnification, full-screen Super Reveal overlay, pacing timer, and minimalist controls.">
   <meta name="author" content="Antigravity Syntax Builder">
   
   <!-- Google Fonts: Inter -->
@@ -1753,8 +1753,94 @@
                           "answer":  "The New Zealand Bill of Rights Act, which was passed in 1990, protects citizens’ rights and outlines the responsibilities of the government."
                       }
                   ]
+    },
+    {
+        "id": 11,
+        "title": "Commas 2",
+        "subtitle": "Clauses, Phrases & Conjunctions",
+        "desc": "Learn to identify independent clauses, dependent clauses, and phrases, and correctly use commas with introductory elements and coordinating conjunctions.",
+        "objectives": [
+            "A comma (,) is a punctuation mark used to separate, clarify, and organise parts of a sentence.",
+            "Commas help readers to pause naturally, understand meaning more clearly, and avoid confusion.",
+            "Use a comma after an introductory word or phrase, and before coordinating conjunctions (FANBOYS)."
+        ],
+        "context": {
+            "badTitle": "Missing Introductory Comma",
+            "badText": "Because the weather was beautiful we decided to walk home.",
+            "goodTitle": "Clear Introductory Setup",
+            "goodText": "Because the weather was beautiful, <span class='highlight'>we decided to walk home</span>."
+        },
+        "vocab": {
+            "term": "Clauses & Phrases",
+            "languages": {
+                "english": {
+                    "definition": "An independent clause can stand alone as a sentence. A dependent clause starts with a connecting word and is incomplete. A phrase is a group of words without both a subject and a verb acting together.",
+                    "example": "Example: During the power outage (phrase), because the power went out (dependent), the power went out (independent)."
+                },
+                "chinese": {
+                    "definition": "独立从句可以单独成句。从属从句以连接词开头，是不完整的。短语是一组词，没有主语和谓语动词一起起作用。",
+                    "example": "例句：在停电期间（短语），因为停电了（从属从句），停电了（独立从句）。"
+                },
+                "korean": {
+                    "definition": "독립절은 독립적인 문장이 될 수 있습니다. 종속절은 접속사로 시작하며 불완전합니다. 구는 주어와 동사가 함께 있지 않은 단어들의 묶음입니다.",
+                    "example": "예문: 정전 동안 (구), 정전이 되었기 때문에 (종속절), 정전이 되었다 (독립절)."
+                }
+            }
+        },
+        "ido": [
+            {
+                "sentence": "Although she practised every single day Sofia still felt nervous before the recital.",
+                "prompt": "Determine where the comma belongs and why.",
+                "answer": "Although she practised every single day, Sofia still felt nervous before the recital. ('Although she practised every single day' is a dependent clause starting the sentence)."
+            }
+        ],
+        "wedo": [
+            {
+                "sentence": "The storm knocked out our electricity so we lit some candles.",
+                "prompt": "Determine where the comma belongs and why.",
+                "answer": "The storm knocked out our electricity, so we lit some candles. (Joined by the FANBOYS coordinating conjunction 'so')."
+            },
+            {
+                "sentence": "Hoping to catch the first train Marcus woke up at dawn.",
+                "prompt": "Determine where the comma belongs and why.",
+                "answer": "Hoping to catch the first train, Marcus woke up at dawn. ('Hoping to catch the first train' is an introductory phrase)."
+            }
+        ],
+        "youdo": [
+            {
+                "id": 1,
+                "question": "Before you turn in your exam make sure you check your work.",
+                "instruction": "Rewrite the sentence, inserting commas where they are required.",
+                "answer": "Before you turn in your exam, make sure you check your work."
+            },
+            {
+                "id": 2,
+                "question": "I wanted to go for a run but the heavy rain stopped me.",
+                "instruction": "Rewrite the sentence, inserting commas where they are required.",
+                "answer": "I wanted to go for a run, but the heavy rain stopped me."
+            },
+            {
+                "id": 3,
+                "question": "She passed the driver’s test because she studied the handbook for weeks.",
+                "instruction": "Rewrite the sentence, inserting commas where they are required.",
+                "answer": "She passed the driver’s test because she studied the handbook for weeks. (No comma needed)."
+            },
+            {
+                "id": 4,
+                "question": "Walking through the quiet forest Sarah felt completely at peace.",
+                "instruction": "Rewrite the sentence, inserting commas where they are required.",
+                "answer": "Walking through the quiet forest, Sarah felt completely at peace."
+            },
+            {
+                "id": 5,
+                "question": "The baker woke up at 3:00am to prep the dough yet the bakery didn’t open until seven.",
+                "instruction": "Rewrite the sentence, inserting commas where they are required.",
+                "answer": "The baker woke up at 3:00am to prep the dough, yet the bakery didn’t open until seven."
+            }
+        ]
     }
 ];
+
     /************************************************************
      * STATE MANAGEMENT & APPLICATION LOGIC
      ************************************************************/
@@ -1801,7 +1887,7 @@
       selectedLessonIndex = index;
       const lesson = LESSONS[selectedLessonIndex];
       
-      // Compile dynamic slides (21 slides)
+      // Compile dynamic slides (varies depending on specific lesson counts)
       activeSlides = compileLessonSlides(lesson);
       
       // Render slide DOM nodes
@@ -1980,8 +2066,8 @@
                   <button class="toggle-btn" onclick="setLanguage('korean', event)">Korean</button>
                 </div>
                 <div class="vocab-definition-box">
-                  <div class="vocab-definition" id="vocab-definition" style="font-size: clamp(2.2rem, 3.4vw, 4.8rem); font-weight: 600;">--</div>
-                  <div class="vocab-example" id="vocab-example" style="font-size: clamp(1.8rem, 2.6vw, 3.8rem); margin-top: 1.2rem;">--</div>
+                  <div class="vocab-definition" id="vocab-definition" style="font-size: clamp(1.6rem, 2.5vw, 3.2rem); font-weight: 600; max-width: 1200px; margin: 0 auto;">--</div>
+                  <div class="vocab-example" id="vocab-example" style="font-size: clamp(1.4rem, 2vw, 2.5rem); margin-top: 1.2rem; max-width: 1200px; margin-left: auto; margin-right: auto;">--</div>
                 </div>
               </div>
             </div>
